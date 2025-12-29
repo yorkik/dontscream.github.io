@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don't Scream</title>
+    <style>
+        @font-face {
+            font-family: 'Ithaca';
+            src: url('fonts/Ithaca.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            position: relative;
+            width: 100vw;
+            min-height: 100vh;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        
+        .corner-arrow {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            z-index: 10;
+        }
+        
+        .corner-arrow.tl {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .corner-arrow.tr {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .corner-arrow.bl {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .corner-arrow.br {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+        
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 60px;
+            z-index: 100;
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            font-family: 'Ithaca', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background-color: white;
+            color: black;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            font-family: 'Ithaca', serif;
+            font-size: 6em;
+            margin-bottom: 10px;
+        }
+        
+        h1 .red-part {
+            color: red;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            text-decoration: none;
+            font-family: 'Georgia', serif;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover:before {
+            left: 0;
+        }
+        
+        .btn:hover {
+            color: black;
+        }
+        
+        .btn.discord {
+            border-color: #5865F2;
+        }
+        
+        .btn.discord:before {
+            background-color: #5865F2;
+        }
+        
+        .btn.discord:hover {
+            color: white;
+        }
+        
+        section {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 5px;
+        }
+        
+        h2 {
+            font-family: 'Georgia', serif;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            font-family: 'Georgia', serif;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        p, li {
+            font-family: 'Georgia', serif;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        .connect-section {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: rgba(0,0,0,0.3);
+            margin-top: 50px;
+        }
+        
+        .server-info {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            font-family: 'Georgia', serif;
+            font-size: 1.1em;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            font-family: 'Georgia', serif;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .faq-question {
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.5rem;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        
+        .faq-answer {
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding: 0 1rem;
+            transition: height 0.3s ease-out, opacity 0.3s ease-out,
+            padding 0.3s ease-out;
+        }
+        
+        .faq-answer.active {
+            opacity: 1;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="corner-arrow tl"></div>
+        <div class="corner-arrow tr"></div>
+        <div class="corner-arrow bl"></div>
+        <div class="corner-arrow br"></div>
+        
+        <header>
+            <h1 id="title">DON'T <span class="red-part">SCREAM</span></h1>
+            <a href="steam://connect/228228:2240" class="btn">Подключиться к серверу</a>
+            <a href="https://discord.gg/cSmhecewkY" class="btn discord">Присоединиться к Discord</a>
+        </header>
+        
+        <section>
+            <h2>Информация о сервере</h2>
+            <div class="server-info">
+                <strong>IP сервера:</strong> 228228:2240<br>
+                <strong>Контент:</strong>
+                    <a
+                        href="https://steamcommunity.com/sharedfiles/filedetails/?id=3628823731"
+                        target="_blank"
+                        style="color: #ffffff; text-decoration: underline"
+                        >"тык"</a
+                    >
+            </div>
+        </section>
+        
+        <section>
+            <h2>Правила сервера</h2>
+            <ul>
+                <li><strong>1.0</strong> — Запрещено использовать все виды читов, AHK скриптов, багов сервера. 
+                    <span style="color: #ff0000"
+                    >[Ban Perma]</span
+                  >
+                </li>
+                <li><strong>1.1</strong> — Запрещено оскорблять и унижать достоинство игроков. 
+                    <span style="color: #ff0000"
+                    >[Mute 15mi]</span
+                  >
+                </li>
+                <li><strong>1.2</strong> — Запрещено оскорблять и унижать родителей игроков. 
+                    <span style="color: #ff0000"
+                    >[Ban 30mi]</span
+                  >
+                </li>
+                <li><strong>1.3</strong> — Запрещено спамить в чат. 
+                    <span style="color: #ff0000"
+                    >[Mute 10mi]</span
+                  >
+                </li>
+            </ul>
+        </section>
+        
+        <section id="faq">
+            <h2>FAQ</h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    Что за режим Don't Scream?
+                </div>
+                <div class="faq-answer">
+                    <p>Don't Scream — это хоррор-режим, где игроки должны включить все генераторы чтобы выжить.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    Как подключиться к серверу?
+                </div>
+                <div class="faq-answer">
+                    <p>Используйте кнопку "Подключиться к серверу" или скопируйте IP адрес из раздела выше.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            © 2025 Don't Scream.<br>
+        </footer>
+    </div>
+    
+    <script>
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            if (answer.classList.contains("active")) {
+                answer.style.height = answer.scrollHeight + "px";
+                requestAnimationFrame(() => {
+                    answer.style.height = "0";
+                    answer.classList.remove("active");
+                });
+            } else {
+                answer.classList.add("active");
+                answer.style.height = answer.scrollHeight + "px";
+                setTimeout(() => {
+                    if (answer.classList.contains("active")) {
+                        answer.style.height = "auto";
+                    }
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
